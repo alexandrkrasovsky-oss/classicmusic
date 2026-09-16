@@ -37,7 +37,7 @@ jobs:
         shell: bash
         run: |
           cd project/ClassicMusic-source-next
-          gzip -dc ../../current/updates18/MainActivity.java.gz > app/src/main/java/ru/classic/music/MainActivity.java
+          cat ../../current/updates18b/part-* | base64 -d | gzip -d > app/src/main/java/ru/classic/music/MainActivity.java
           echo "29b56a16b3bb2ba3f025c0f4839fb3c68b7a5de1cab1a821a528d489cbb75da4  app/src/main/java/ru/classic/music/MainActivity.java" | sha256sum -c -
           grep -q 'favoritesHeader=button("любимые песни"' app/src/main/java/ru/classic/music/MainActivity.java
           grep -q 'getTopFadingEdgeStrength' app/src/main/java/ru/classic/music/MainActivity.java
@@ -73,6 +73,3 @@ jobs:
           name: ClassicMusic-1.8
           path: project/ClassicMusic-source-next/build/manual/ClassicMusic-1.8.apk
           if-no-files-found: error
-
-# source: verified binary blob updates18/MainActivity.java.gz
-# build: 1.8
