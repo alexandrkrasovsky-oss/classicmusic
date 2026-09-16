@@ -33,11 +33,12 @@ jobs:
           mkdir project
           unzip -q ClassicMusic-source-1.3.zip -d project
 
-      - name: Apply 1.6 UI source
+      - name: Apply and verify 1.6 UI source
         shell: bash
         run: |
           cd project/ClassicMusic-source-next
-          cat ../../current/updates16/main.part-* | base64 -d | gzip -d > app/src/main/java/ru/classic/music/MainActivity.java
+          cat ../../current/updates16b/main.part-* | base64 -d | gzip -d > app/src/main/java/ru/classic/music/MainActivity.java
+          echo "b6aca0fc7c69ff082fcdac0a6253a609ff7d1f02e603d01c06d022a871e0a140  app/src/main/java/ru/classic/music/MainActivity.java" | sha256sum -c -
           ! grep -qi 'cassette' app/src/main/java/ru/classic/music/MainActivity.java
           grep -q 'styleToggle(shuffle' app/src/main/java/ru/classic/music/MainActivity.java
           grep -q 'HapticFeedbackConstants.KEYBOARD_TAP' app/src/main/java/ru/classic/music/MainActivity.java
