@@ -33,17 +33,16 @@ jobs:
           mkdir project
           unzip -q ClassicMusic-source-1.3.zip -d project
 
-      - name: Apply and verify 1.6 UI source
+      - name: Apply and verify 1.7 UI source
         shell: bash
         run: |
           cd project/ClassicMusic-source-next
-          cat ../../current/updates16b/main.part-* | base64 -d | gzip -d > app/src/main/java/ru/classic/music/MainActivity.java
-          echo "b6aca0fc7c69ff082fcdac0a6253a609ff7d1f02e603d01c06d022a871e0a140  app/src/main/java/ru/classic/music/MainActivity.java" | sha256sum -c -
-          ! grep -qi 'cassette' app/src/main/java/ru/classic/music/MainActivity.java
-          grep -q 'styleToggle(shuffle' app/src/main/java/ru/classic/music/MainActivity.java
-          grep -q 'HapticFeedbackConstants.KEYBOARD_TAP' app/src/main/java/ru/classic/music/MainActivity.java
-          sed -i 's/--version-code 13 --version-name 1.3/--version-code 16 --version-name 1.6/' build-apk.sh
-          sed -i 's/ClassicMusic-1.3.apk/ClassicMusic-1.6.apk/g' build-apk.sh
+          cat ../../current/updates17/main.part-* | base64 -d | gzip -d > app/src/main/java/ru/classic/music/MainActivity.java
+          echo "eb5cb0eaecae27f217d9804669217a126988f21afce46f472b840f098cc289a5  app/src/main/java/ru/classic/music/MainActivity.java" | sha256sum -c -
+          grep -q 'setCompactPlayer' app/src/main/java/ru/classic/music/MainActivity.java
+          grep -q 'favoritesHeader' app/src/main/java/ru/classic/music/MainActivity.java
+          sed -i 's/--version-code 13 --version-name 1.3/--version-code 17 --version-name 1.7/' build-apk.sh
+          sed -i 's/ClassicMusic-1.3.apk/ClassicMusic-1.7.apk/g' build-apk.sh
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -70,6 +69,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ClassicMusic-1.6
-          path: project/ClassicMusic-source-next/build/manual/ClassicMusic-1.6.apk
+          name: ClassicMusic-1.7
+          path: project/ClassicMusic-source-next/build/manual/ClassicMusic-1.7.apk
           if-no-files-found: error
