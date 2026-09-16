@@ -44,6 +44,7 @@ jobs:
         working-directory: project/ClassicMusic-source-next
         shell: bash
         run: |
+          sed -i 's/-bootclasspath "$ANDROID_JAR"/-classpath "$ANDROID_JAR"/' build-apk.sh
           chmod +x build-apk.sh
           ./build-apk.sh
 
