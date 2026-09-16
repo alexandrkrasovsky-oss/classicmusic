@@ -75,3 +75,4 @@ jobs:
           if-no-files-found: error
 
 # source: verified binary blob updates18/MainActivity.java.gz
+# build: 1.8
