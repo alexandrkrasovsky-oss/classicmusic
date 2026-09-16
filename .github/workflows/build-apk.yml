@@ -73,3 +73,5 @@ jobs:
           name: ClassicMusic-1.8
           path: project/ClassicMusic-source-next/build/manual/ClassicMusic-1.8.apk
           if-no-files-found: error
+
+# source: verified binary blob updates18/MainActivity.java.gz
