@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.10 Release
+name: Publish ClassicMusic 1.11 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35204235277 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.10 -D release-files
-          test -f release-files/ClassicMusic-1.10.apk
-          echo "af943d8e8987c14a3844a346b6f21370c65cd4aae5234344214c46ff5c43eb24  release-files/ClassicMusic-1.10.apk" | sha256sum -c -
+          gh run download 35205239539 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.11 -D release-files
+          test -f release-files/ClassicMusic-1.11.apk
+          echo "84b85c573d18292df66c024ceccd56a9118676b03a32f5898e35a466e6882cba  release-files/ClassicMusic-1.11.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.10 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.10 release-files/ClassicMusic-1.10.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.11 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.11 release-files/ClassicMusic-1.11.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.10 release-files/ClassicMusic-1.10.apk \
+            gh release create v1.11 release-files/ClassicMusic-1.11.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.10" \
-              --notes "ClassicMusic 1.10. UI cleanup for favorites, radio placement and player spacing. Signed Android APK. SHA-256: af943d8e8987c14a3844a346b6f21370c65cd4aae5234344214c46ff5c43eb24"
+              --title "ClassicMusic 1.11" \
+              --notes "ClassicMusic 1.11. Interface polish: removed separator lines, normalized favorites spacing, balanced player progress/time/control spacing, and refined now-playing typography. Signed Android APK. SHA-256: 84b85c573d18292df66c024ceccd56a9118676b03a32f5898e35a466e6882cba"
           fi
