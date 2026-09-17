@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.12 Release
+name: Publish ClassicMusic 1.14 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35206721146 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.12 -D release-files
-          test -f release-files/ClassicMusic-1.12.apk
-          echo "a4b6b6a44344bbe7bdf6233dfc5392be4ba34c3784b646dec021ae81ab059ee4  release-files/ClassicMusic-1.12.apk" | sha256sum -c -
+          gh run download 35208154102 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.14 -D release-files
+          test -f release-files/ClassicMusic-1.14.apk
+          echo "f0364bbf14d11ae82ea0b6eacfbb18b71836bafd6d00e3232f50ed0c04004a09  release-files/ClassicMusic-1.14.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.12 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.12 release-files/ClassicMusic-1.12.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.14 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.14 release-files/ClassicMusic-1.14.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.12 release-files/ClassicMusic-1.12.apk \
+            gh release create v1.14 release-files/ClassicMusic-1.14.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.12" \
-              --notes "ClassicMusic 1.12. Cold-start playback controls now start My Wave: Play, Back, Next and Shuffle all begin playback when no track is loaded. Added the broken black ring launcher icon based on the Dark Marga mark. Signed Android APK. SHA-256: a4b6b6a44344bbe7bdf6233dfc5392be4ba34c3784b646dec021ae81ab059ee4"
+              --title "ClassicMusic 1.14" \
+              --notes "ClassicMusic 1.14. Unified compact 6dp vertical rhythm across Main and Favorites, fixed top-button geometry, short fade-out/fade-in page switching, simplified player text, softened secondary text, cold-start Play starts My Wave, new broken-ring music icon, and a subtle Dark Marga mark above Exit on the main screen. Signed Android APK. SHA-256: f0364bbf14d11ae82ea0b6eacfbb18b71836bafd6d00e3232f50ed0c04004a09"
           fi
