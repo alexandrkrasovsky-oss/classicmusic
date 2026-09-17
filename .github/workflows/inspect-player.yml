@@ -1,4 +1,4 @@
-name: Inspect ClassicMusic cold-start playback
+name: Inspect ClassicMusic startup binding
 on:
   push:
     branches: [ main ]
@@ -36,9 +36,7 @@ jobs:
           python3 ../../current/updates11/patch.py
           python3 ../../current/updates12/patch.py
           python3 ../../current/updates13/patch.py
-          echo '=== MAIN START / SERVICE BINDING ==='
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '90,175p'
-          echo '=== MAIN PLAYER BUTTONS / CHANGED ==='
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '185,215p;388,405p'
-          echo '=== PLAYBACK SERVICE ==='
-          nl -ba app/src/main/java/ru/classic/music/PlaybackService.java | sed -n '1,220p'
+          echo '=== MAIN 1-110 ==='
+          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '1,110p'
+          echo '=== MAIN 180-340 ==='
+          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '180,340p'
