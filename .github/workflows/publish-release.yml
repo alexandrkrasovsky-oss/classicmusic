@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.25 Release
+name: Publish ClassicMusic 1.26 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35249459891 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.25 -D release-files
-          test -f release-files/ClassicMusic-1.25.apk
-          echo "70ed74c006b1128aa121bc3b55b1a31d17d74d9db7f6c77eda7ea8cbbecb18a1  release-files/ClassicMusic-1.25.apk" | sha256sum -c -
+          gh run download 35252400884 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.26 -D release-files
+          test -f release-files/ClassicMusic-1.26.apk
+          echo "3da5f46dd112d745b35517fccb583e0919d757b53bb78b2548b565dab47e7707  release-files/ClassicMusic-1.26.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.25 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.25 release-files/ClassicMusic-1.25.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.26 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.26 release-files/ClassicMusic-1.26.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.25 release-files/ClassicMusic-1.25.apk \
+            gh release create v1.26 release-files/ClassicMusic-1.26.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.25" \
-              --notes "ClassicMusic 1.25. Added a restrained vintage Japanese-deck-style dual L/R meter beneath the artist: two rows of 12 rectangular segments, with soft green level segments and the final two red peak/overload segments. The meters react to the live playback signal with fast attack and slower falloff, freeze naturally on pause, disappear when nothing is playing, and stay hidden in the compact Favorites player. Android may ask once for audio/microphone permission because the system Visualizer API requires RECORD_AUDIO; the app attaches Visualizer to its own playback session and does not record or save microphone audio. Radio behavior and the 1.24 lamp indicator are retained. Signed Android APK. SHA-256: 70ed74c006b1128aa121bc3b55b1a31d17d74d9db7f6c77eda7ea8cbbecb18a1"
+              --title "ClassicMusic 1.26" \
+              --notes "ClassicMusic 1.26. The vintage dual L/R meters no longer use Android Visualizer and the app no longer requests audio/microphone access for them. To avoid that permission entirely, the meters are now a restrained playback-state-driven vintage animation rather than raw waveform measurement. They animate while Yandex music or radio is actually playing and extinguish immediately on pause or stop. The two 12-segment Japanese-deck-style rows, green signal segments and red overload tips are retained. Radio behavior and the lamp-style power indicator are unchanged. Signed Android APK. SHA-256: 3da5f46dd112d745b35517fccb583e0919d757b53bb78b2548b565dab47e7707"
           fi
