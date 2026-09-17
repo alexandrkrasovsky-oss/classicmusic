@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.21 Release
+name: Publish ClassicMusic 1.22 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35238374805 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.21 -D release-files
-          test -f release-files/ClassicMusic-1.21.apk
-          echo "72abf53c137b847e2b56d7f50eff69f705e16bf80e85f3cc905569a5bf94c454  release-files/ClassicMusic-1.21.apk" | sha256sum -c -
+          gh run download 35239589462 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.22 -D release-files
+          test -f release-files/ClassicMusic-1.22.apk
+          echo "4b8b508a401ea7334c90196880a7263ab5a756640140a1d39c21376b7c9f061d  release-files/ClassicMusic-1.22.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.21 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.21 release-files/ClassicMusic-1.21.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.22 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.22 release-files/ClassicMusic-1.22.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.21 release-files/ClassicMusic-1.21.apk \
+            gh release create v1.22 release-files/ClassicMusic-1.22.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.21" \
-              --notes "ClassicMusic 1.21. Fixed the radio power control rendering by replacing the font-dependent Unicode glyph with a real Android vector icon, so it no longer appears as a missing-glyph box. The power control is also positioned on the same responsive right-third axis as the player's right-hand controls for cleaner symmetry. Radio swipe/tap behavior and the rest of the 1.20 interface are unchanged. Signed Android APK. SHA-256: 72abf53c137b847e2b56d7f50eff69f705e16bf80e85f3cc905569a5bf94c454"
+              --title "ClassicMusic 1.22" \
+              --notes "ClassicMusic 1.22. Radio interaction is simplified: the first tap on the centered radio card starts the selected station, and each following tap advances to the next station. Swipe station switching has been removed. While a stream is connecting, the card explicitly shows the station name plus 'загрузка…'; connection failures show 'не удалось'. The power glyph is now frameless and stop-only, appears only while radio is loading/playing, and its visual right edge follows the same right edge as the player's right-side controls. Signed Android APK. SHA-256: 4b8b508a401ea7334c90196880a7263ab5a756640140a1d39c21376b7c9f061d"
           fi
