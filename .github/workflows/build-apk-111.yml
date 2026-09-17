@@ -1,5 +1,6 @@
 name: Build ClassicMusic 1.12 APK
 
+# Rebuild 1.12 after launcher icon refinement.
 on:
   workflow_dispatch:
   push:
