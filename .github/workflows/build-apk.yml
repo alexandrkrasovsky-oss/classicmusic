@@ -41,6 +41,13 @@ jobs:
           echo "29b56a16b3bb2ba3f025c0f4839fb3c68b7a5de1cab1a821a528d489cbb75da4  app/src/main/java/ru/classic/music/MainActivity.java" | sha256sum -c -
           cat ../../current/updates19/patch.part-* | base64 -d > /tmp/patch19.py
           echo "fc6943e73814dd0434fc11a999c343114aa157fa48fd402080a458438243d4f4  /tmp/patch19.py" | sha256sum -c -
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('/tmp/patch19.py')
+          s=p.read_text()
+          s=s.replace("r'private final UiTheme\\[\\] themes\\s*=\\s*\\{.*?\\n\\s*\\};'", "r'private final UiTheme\\[\\] themes\\s*=\\s*\\{.*?\\};'")
+          p.write_text(s)
+          PY
           python3 /tmp/patch19.py
           grep -q 'radioButton=button("поймать радиоволну"' app/src/main/java/ru/classic/music/MainActivity.java
           grep -q 'вернуться на главную' app/src/main/java/ru/classic/music/MainActivity.java
