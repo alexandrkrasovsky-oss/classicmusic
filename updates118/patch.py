@@ -61,4 +61,25 @@ s=one(s,
 ''',
 'compact player padding')
 
+# Pagination is invisible: no technical "load more" button. Near the end of the list, fetch the next page automatically.
+s=one(s,
+'''            list.setAdapter(adapter);list.setOnItemClickListener((p,v,i,id)->{uiStatus="";if(service!=null)stopRadio(true);service.startFavorites(favorites,i);});LinearLayout.LayoutParams listLp=new LinearLayout.LayoutParams(-1,0,1);listLp.setMargins(dp(4),0,dp(4),dp(6));body.addView(list,listLp);
+            more=button("загрузить ещё",this::loadMore);LinearLayout.LayoutParams mp=new LinearLayout.LayoutParams(-1,dp(50));mp.setMargins(dp(4),0,dp(4),0);body.addView(more,mp);updateList();
+''',
+'''            list.setAdapter(adapter);list.setOnItemClickListener((p,v,i,id)->{uiStatus="";if(service!=null)stopRadio(true);service.startFavorites(favorites,i);});
+            list.setOnScrollListener(new AbsListView.OnScrollListener(){
+                public void onScrollStateChanged(AbsListView view,int state){}
+                public void onScroll(AbsListView view,int first,int visible,int total){if(total>0&&first+visible>=total-3&&!loading&&loaded<favorites.size())loadMore();}
+            });
+            LinearLayout.LayoutParams listLp=new LinearLayout.LayoutParams(-1,0,1);listLp.setMargins(dp(4),0,dp(4),dp(6));body.addView(list,listLp);updateList();
+''',
+'favorites auto pagination')
+
+s=one(s,
+'''        more.setVisibility(loaded<favorites.size()?View.VISIBLE:View.GONE);more.setEnabled(!loading);more.setText("загрузить ещё  ·  "+loaded+" / "+favorites.size());
+''',
+'''        if(more!=null){more.setVisibility(View.GONE);}
+''',
+'hide legacy more button')
+
 p.write_text(s)
