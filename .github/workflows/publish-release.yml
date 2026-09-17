@@ -1,0 +1,38 @@
+name: Publish ClassicMusic 1.9 Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/publish-release.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download verified APK artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p release-files
+          gh run download 35197448645 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.9 -D release-files
+          test -f release-files/ClassicMusic-1.9.apk
+          echo "93021c53c62f615f46455364bc9bf7d853cf3308e40b6783fa623f1a920ab3f5  release-files/ClassicMusic-1.9.apk" | sha256sum -c -
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v1.9 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.9 release-files/ClassicMusic-1.9.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          else
+            gh release create v1.9 release-files/ClassicMusic-1.9.apk \
+              -R alexandrkrasovsky-oss/classicmusic \
+              --title "ClassicMusic 1.9" \
+              --notes "ClassicMusic 1.9. Signed Android APK. SHA-256: 93021c53c62f615f46455364bc9bf7d853cf3308e40b6783fa623f1a920ab3f5"
+          fi
