@@ -1,4 +1,4 @@
-name: Inspect ClassicMusic layout 1.17
+name: Inspect ClassicMusic compact player
 on:
   push:
     branches: [ main ]
@@ -39,6 +39,4 @@ jobs:
           python3 ../../current/updates14/patch.py
           python3 ../../current/updates15/patch.py
           python3 ../../current/updates16/patch.py
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '40,95p'
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '175,270p'
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '290,390p'
+          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '263,295p'
