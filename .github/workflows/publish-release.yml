@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.18 Release
+name: Publish ClassicMusic 1.19 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35214966417 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.18 -D release-files
-          test -f release-files/ClassicMusic-1.18.apk
-          echo "427df511ea0c8542cb22ffeac7f91e5abe5389151caef1c38360d74ee11d8c40  release-files/ClassicMusic-1.18.apk" | sha256sum -c -
+          gh run download 35217313928 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.19 -D release-files
+          test -f release-files/ClassicMusic-1.19.apk
+          echo "70f2ce77e7cca0b91739c47664430b0edd520f5f8f10217de6c5a93df4950e35  release-files/ClassicMusic-1.19.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.18 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.18 release-files/ClassicMusic-1.18.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.19 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.19 release-files/ClassicMusic-1.19.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.18 release-files/ClassicMusic-1.18.apk \
+            gh release create v1.19 release-files/ClassicMusic-1.19.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.18" \
-              --notes "ClassicMusic 1.18. The main screen is now one vertically centered composition with a strict 6dp rhythm between neighboring blocks. Favorites always uses the compact player: no cover, seek bar or time, leaving much more room for the song list. The hidden radio placeholder was removed entirely. The technical 'загрузить ещё' button was removed; favorites pages now load automatically as you scroll near the end. Cross-dissolve navigation remains. Signed Android APK. SHA-256: 427df511ea0c8542cb22ffeac7f91e5abe5389151caef1c38360d74ee11d8c40"
+              --title "ClassicMusic 1.19" \
+              --notes "ClassicMusic 1.19. The main page now keeps a strict 6dp rhythm from the tabs through the wave button, dislike button, full player and radio button; the large elastic gap under the tabs is gone. The complete main composition is optically balanced as one unit with responsive outer spacing instead of variable internal gaps. The redundant status row was removed so the footer mark and Exit stay visually fixed. Switching between My Wave and Favorites now uses a 235ms Apple-like compress/expand cross-dissolve: the large player gently contracts into the compact Favorites layout and expands back without a hard vertical jump. Favorites keeps the compact player and automatic list pagination. Signed Android APK. SHA-256: 70f2ce77e7cca0b91739c47664430b0edd520f5f8f10217de6c5a93df4950e35"
           fi
