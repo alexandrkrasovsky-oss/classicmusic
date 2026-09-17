@@ -1,4 +1,4 @@
-name: Inspect ClassicMusic playback startup
+name: Inspect ClassicMusic UI polish targets
 on:
   push:
     branches: [ main ]
@@ -34,4 +34,8 @@ jobs:
           python3 /tmp/patch19.py
           python3 ../../current/updates10/patch.py
           python3 ../../current/updates11/patch.py
-          grep -n -E 'startWave|wave|toggle\(|previous\(|next\(|toggleShuffle|startFavorites|current|track' app/src/main/java/ru/classic/music/MainActivity.java | head -n 220
+          python3 ../../current/updates12/patch.py
+          echo '=== UI 170-350 ==='
+          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '170,350p'
+          echo '=== UI 388-470 ==='
+          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '388,470p'
