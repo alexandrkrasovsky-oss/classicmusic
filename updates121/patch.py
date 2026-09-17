@@ -11,12 +11,14 @@ p=Path('app/src/main/java/ru/classic/music/MainActivity.java')
 s=p.read_text()
 
 # Replace the Unicode power glyph (missing in some Android fonts) with a real vector drawable.
+# Its center sits on the same responsive right-third axis as the player's right-hand controls.
 s=one(s,
 '''        TextView radioPower=text("⏻",21,activeTheme.muted);radioPower.setGravity(Gravity.CENTER);radioPower.setTypeface(uiFontStrong());radioPower.setContentDescription("Включить или остановить радио");
         FrameLayout.LayoutParams powerLp=new FrameLayout.LayoutParams(dp(40),dp(40),Gravity.END|Gravity.CENTER_VERTICAL);powerLp.setMargins(0,0,dp(5),0);radioCard.addView(radioPower,powerLp);radioCard.setTag(radioPower);
 ''',
 '''        ImageView radioPower=new ImageView(this);radioPower.setImageResource(R.drawable.ic_radio_power);radioPower.setScaleType(ImageView.ScaleType.CENTER);radioPower.setPadding(dp(9),dp(9),dp(9),dp(9));radioPower.setContentDescription("Включить или остановить радио");
-        FrameLayout.LayoutParams powerLp=new FrameLayout.LayoutParams(dp(40),dp(40),Gravity.END|Gravity.CENTER_VERTICAL);powerLp.setMargins(0,0,dp(5),0);radioCard.addView(radioPower,powerLp);radioCard.setTag(radioPower);
+        FrameLayout.LayoutParams powerLp=new FrameLayout.LayoutParams(dp(40),dp(40),Gravity.START|Gravity.CENTER_VERTICAL);radioCard.addView(radioPower,powerLp);radioCard.setTag(radioPower);
+        radioCard.addOnLayoutChangeListener((v,l,t,r,b,ol,ot,or,ob)->{int w=r-l;if(w>0)radioPower.setX(w*5f/6f-dp(20));});
 ''',
 'vector power control')
 
