@@ -1,4 +1,4 @@
-name: Inspect ClassicMusic UI polish targets
+name: Inspect ClassicMusic cold-start playback
 on:
   push:
     branches: [ main ]
@@ -35,7 +35,10 @@ jobs:
           python3 ../../current/updates10/patch.py
           python3 ../../current/updates11/patch.py
           python3 ../../current/updates12/patch.py
-          echo '=== UI 170-350 ==='
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '170,350p'
-          echo '=== UI 388-470 ==='
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '388,470p'
+          python3 ../../current/updates13/patch.py
+          echo '=== MAIN START / SERVICE BINDING ==='
+          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '90,175p'
+          echo '=== MAIN PLAYER BUTTONS / CHANGED ==='
+          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '185,215p;388,405p'
+          echo '=== PLAYBACK SERVICE ==='
+          nl -ba app/src/main/java/ru/classic/music/PlaybackService.java | sed -n '1,220p'
