@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.14 Release
+name: Publish ClassicMusic 1.15 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35208154102 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.14 -D release-files
-          test -f release-files/ClassicMusic-1.14.apk
-          echo "f0364bbf14d11ae82ea0b6eacfbb18b71836bafd6d00e3232f50ed0c04004a09  release-files/ClassicMusic-1.14.apk" | sha256sum -c -
+          gh run download 35209687433 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.15 -D release-files
+          test -f release-files/ClassicMusic-1.15.apk
+          echo "4c748d40dcf0f955bab631c319f3d43c79bed9a524492f6974a4f2d4c5e0bbc4  release-files/ClassicMusic-1.15.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.14 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.14 release-files/ClassicMusic-1.14.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.15 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.15 release-files/ClassicMusic-1.15.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.14 release-files/ClassicMusic-1.14.apk \
+            gh release create v1.15 release-files/ClassicMusic-1.15.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.14" \
-              --notes "ClassicMusic 1.14. Unified compact 6dp vertical rhythm across Main and Favorites, fixed top-button geometry, short fade-out/fade-in page switching, simplified player text, softened secondary text, cold-start Play starts My Wave, new broken-ring music icon, and a subtle Dark Marga mark above Exit on the main screen. Signed Android APK. SHA-256: f0364bbf14d11ae82ea0b6eacfbb18b71836bafd6d00e3232f50ed0c04004a09"
+              --title "ClassicMusic 1.15" \
+              --notes "ClassicMusic 1.15. Final UI polish: softer button typography, Dark Marga mark on both Main and Favorites, centered distressed broken-ring music launcher icon, and 'волна по треку' replacing shuffle. Track wave uses the current song as the seed. Signed Android APK. SHA-256: 4c748d40dcf0f955bab631c319f3d43c79bed9a524492f6974a4f2d4c5e0bbc4"
           fi

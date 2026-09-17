@@ -1,7 +1,7 @@
-name: Inspect ClassicMusic startup binding
+name: Inspect ClassicMusic final UI controls
 on:
   push:
-    branches: [ main ]
+    branches: [ ui-polish-114 ]
     paths: ['.github/workflows/inspect-player.yml']
 jobs:
   inspect:
@@ -22,21 +22,24 @@ jobs:
           cat ../../current/updates19/patch.part-* | base64 -d > /tmp/patch19.py
           python3 - <<'PY'
           from pathlib import Path
-          p=Path('app/src/main/java/ru/classic/music/MainActivity.java');s=p.read_text();start=s.index('private final UiTheme[] themes');brace=s.index('{',start);d=0
+          p=Path('app/src/main/java/ru/classic/music/MainActivity.java')
+          s=p.read_text(); start=s.index('private final UiTheme[] themes'); brace=s.index('{',start); d=0
           for i in range(brace,len(s)):
               if s[i]=='{': d+=1
               elif s[i]=='}':
                   d-=1
                   if d==0: end=s.index(';',i)+1; break
           block='''private final UiTheme[] themes={new UiTheme(0xffEEE6DA,0xffF8F1E7,0xffD5C6B2,0xffA85D2A,0xff211E1A,0xff2A2621,0xff7A6F63,0x28A85D2A),new UiTheme(0xffE8E8E8,0xffFAFAFA,0xffC8C8C8,0xff555555,0xff151515,0xff1B1B1B,0xff707070,0x1F555555),new UiTheme(0xffDDF4F0,0xffF6FFFD,0xff9FD8D0,0xff168E88,0xff172B29,0xff183C39,0xff607A77,0x2881D8D0),new UiTheme(0xffFBE7E2,0xffFFF8F6,0xffEFC0B5,0xffD66D5E,0xff332220,0xff482E2A,0xff8C6A64,0x28E58C7D),new UiTheme(0xffE8EBF2,0xffF8F9FC,0xffBDC5D6,0xff536A9B,0xff1F2633,0xff273248,0xff697386,0x28536A9B)};'''
-          p.write_text(s[:start]+block+s[end:]);q=Path('/tmp/patch19.py');x=q.read_text().replace("def sub1(pattern,repl,label,flags=0):\n    global s\n","def sub1(pattern,repl,label,flags=0):\n    global s\n    if label=='themes': return\n");q.write_text(x)
+          p.write_text(s[:start]+block+s[end:])
+          q=Path('/tmp/patch19.py'); x=q.read_text().replace("def sub1(pattern,repl,label,flags=0):\n    global s\n","def sub1(pattern,repl,label,flags=0):\n    global s\n    if label=='themes': return\n"); q.write_text(x)
           PY
           python3 /tmp/patch19.py
           python3 ../../current/updates10/patch.py
           python3 ../../current/updates11/patch.py
           python3 ../../current/updates12/patch.py
           python3 ../../current/updates13/patch.py
-          echo '=== MAIN 1-110 ==='
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '1,110p'
-          echo '=== MAIN 180-340 ==='
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '180,340p'
+          python3 ../../current/updates14/patch.py
+          echo '=== CONTROLS AND HELPERS ==='
+          grep -n -E 'primaryButton|Button button|button\(|shuffle|footerMark|setTextColor|applyTheme|configureControls|showPage|switchPage' app/src/main/java/ru/classic/music/MainActivity.java | head -n 220
+          echo '=== MAIN 150-470 ==='
+          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '150,470p'
