@@ -55,7 +55,7 @@ s=one(s,
 s=one(s,
 '''            radioButton.setVisibility(View.VISIBLE);LinearLayout.LayoutParams rp=new LinearLayout.LayoutParams(-1,dp(50));rp.setMargins(dp(4),dp(6),dp(4),0);body.addView(radioButton,rp);
 ''',
-'''            radioButton.setVisibility(View.VISIBLE);View radioCard=(View)radioButton.getTag();radioCard.setVisibility(View.VISIBLE);LinearLayout.LayoutParams rp=new LinearLayout.LayoutParams(-1,dp(50));rp.setMargins(dp(4),dp(6),dp(4),0);body.addView(radioCard,rp);
+'''            radioButton.setVisibility(View.VISIBLE);View radioCardView=(View)radioButton.getTag();radioCardView.setVisibility(View.VISIBLE);LinearLayout.LayoutParams rp=new LinearLayout.LayoutParams(-1,dp(50));rp.setMargins(dp(4),dp(6),dp(4),0);body.addView(radioCardView,rp);
 ''',
 'attach radio card')
 
