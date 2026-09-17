@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.26 Release
+name: Publish ClassicMusic 1.27 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35252400884 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.26 -D release-files
-          test -f release-files/ClassicMusic-1.26.apk
-          echo "3da5f46dd112d745b35517fccb583e0919d757b53bb78b2548b565dab47e7707  release-files/ClassicMusic-1.26.apk" | sha256sum -c -
+          gh run download 35253808399 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.27 -D release-files
+          test -f release-files/ClassicMusic-1.27.apk
+          echo "32b40906e7da95ce354e9dcb69d9660adb1a227ea264a7489e4516d64fed9613  release-files/ClassicMusic-1.27.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.26 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.26 release-files/ClassicMusic-1.26.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.27 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.27 release-files/ClassicMusic-1.27.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.26 release-files/ClassicMusic-1.26.apk \
+            gh release create v1.27 release-files/ClassicMusic-1.27.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.26" \
-              --notes "ClassicMusic 1.26. The vintage dual L/R meters no longer use Android Visualizer and the app no longer requests audio/microphone access for them. To avoid that permission entirely, the meters are now a restrained playback-state-driven vintage animation rather than raw waveform measurement. They animate while Yandex music or radio is actually playing and extinguish immediately on pause or stop. The two 12-segment Japanese-deck-style rows, green signal segments and red overload tips are retained. Radio behavior and the lamp-style power indicator are unchanged. Signed Android APK. SHA-256: 3da5f46dd112d745b35517fccb583e0919d757b53bb78b2548b565dab47e7707"
+              --title "ClassicMusic 1.27" \
+              --notes "ClassicMusic 1.27. The main player now recognizes radio playback instead of showing 'ничего не играет'. While a stream is connecting, the player shows the selected station with 'радио · загрузка…'; once connected it shows the station name with 'радио'. Radio also gets a restrained symbolic antenna cover in the same tinted visual language as the rest of the player. Normal track artwork and metadata return automatically when radio is stopped. The permissionless vintage L/R meters from 1.26 continue to animate for both music and radio and extinguish on pause/stop. Signed Android APK. SHA-256: 32b40906e7da95ce354e9dcb69d9660adb1a227ea264a7489e4516d64fed9613"
           fi
