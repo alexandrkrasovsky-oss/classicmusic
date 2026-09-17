@@ -1,4 +1,4 @@
-name: Inspect ClassicMusic player layout
+name: Inspect ClassicMusic playback startup
 on:
   push:
     branches: [ main ]
@@ -32,4 +32,6 @@ jobs:
           p.write_text(s[:start]+block+s[end:]);q=Path('/tmp/patch19.py');x=q.read_text().replace("def sub1(pattern,repl,label,flags=0):\n    global s\n","def sub1(pattern,repl,label,flags=0):\n    global s\n    if label=='themes': return\n");q.write_text(x)
           PY
           python3 /tmp/patch19.py
-          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '184,272p'
+          python3 ../../current/updates10/patch.py
+          python3 ../../current/updates11/patch.py
+          grep -n -E 'startWave|wave|toggle\(|previous\(|next\(|toggleShuffle|startFavorites|current|track' app/src/main/java/ru/classic/music/MainActivity.java | head -n 220
