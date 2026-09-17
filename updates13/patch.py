@@ -20,11 +20,14 @@ one('''time=text("0:00 / 0:00",12,activeTheme.muted);time.setGravity(Gravity.CEN
 one('''status=text("",12,activeTheme.muted);status.setGravity(Gravity.CENTER);status.setMaxLines(2);''','''status=text("",12,activeTheme.muted);status.setGravity(Gravity.CENTER);status.setMaxLines(2);status.setAlpha(.72f);''','soften status')
 
 # Keep the eyebrow hidden in both player modes and remove the old title top padding.
-one('''cover.setVisibility(View.GONE);\n            eyebrow.setVisibility(View.GONE);''','''cover.setVisibility(View.GONE);\n            eyebrow.setVisibility(View.GONE);''','compact eyebrow stays hidden')
 one('''cover.setVisibility(View.VISIBLE);\n            eyebrow.setVisibility(View.VISIBLE);''','''cover.setVisibility(View.VISIBLE);\n            eyebrow.setVisibility(View.GONE);''','normal eyebrow hidden')
 one('''title.setTextSize(19);title.setMaxLines(2);title.setGravity(Gravity.START);title.setPadding(0,dp(10),0,0);''','''title.setTextSize(19);title.setMaxLines(2);title.setGravity(Gravity.START);title.setPadding(0,0,0,0);''','normal title padding')
 
 # Unify the large page buttons at 50dp, matching the top brand and radio control.
 s=s.replace('new LinearLayout.LayoutParams(-1,dp(48))','new LinearLayout.LayoutParams(-1,dp(50))')
+
+# The 1.12 service knows how to start My Wave from a cold start; keep Play and Shuffle clickable so that behavior is reachable.
+one('''play.setText(service!=null&&service.playing()?"Ⅱ  пауза":"▶  играть");play.setEnabled(has);like.setEnabled(has);seek.setEnabled(has&&service.duration()>0);boolean likedNow=service!=null&&service.isLiked();''','''play.setText(service!=null&&service.playing()?"Ⅱ  пауза":"▶  играть");play.setEnabled(service!=null&&loggedIn);like.setEnabled(has);seek.setEnabled(has&&service.duration()>0);boolean likedNow=service!=null&&service.isLiked();''','enable play cold start')
+one('''shuffle.setSelected(service!=null&&service.isShuffle());shuffle.setEnabled(has);shuffle.setText("вразброс");repeat.setSelected(service!=null&&service.isRepeat());repeat.setText("повтор");''','''shuffle.setSelected(service!=null&&service.isShuffle());shuffle.setEnabled(service!=null&&loggedIn);shuffle.setText("вразброс");repeat.setSelected(service!=null&&service.isRepeat());repeat.setText("повтор");''','enable shuffle cold start')
 
 p.write_text(s)
