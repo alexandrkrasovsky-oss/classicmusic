@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.17 Release
+name: Publish ClassicMusic 1.18 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35213491821 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.17 -D release-files
-          test -f release-files/ClassicMusic-1.17.apk
-          echo "bf2c3f72b5258331757879cb0d80e9e50272ef7a84cecc4beb651ab4ef6d94f5  release-files/ClassicMusic-1.17.apk" | sha256sum -c -
+          gh run download 35214966417 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.18 -D release-files
+          test -f release-files/ClassicMusic-1.18.apk
+          echo "427df511ea0c8542cb22ffeac7f91e5abe5389151caef1c38360d74ee11d8c40  release-files/ClassicMusic-1.18.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.17 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.17 release-files/ClassicMusic-1.17.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.18 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.18 release-files/ClassicMusic-1.18.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.17 release-files/ClassicMusic-1.17.apk \
+            gh release create v1.18 release-files/ClassicMusic-1.18.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.17" \
-              --notes "ClassicMusic 1.17. Main and Favorites now share a fixed responsive central stage, so the header, player anchor, radio slot and footer do not jump when switching sections. Favorites uses the remaining flexible area for its scrolling list. On short Android screens the player switches to the same compact mode on both pages. Section switching now uses a short Apple-like cross dissolve: the old content fades away while the new content appears through it with a subtle 0.99 to 1.0 scale. Signed Android APK. SHA-256: bf2c3f72b5258331757879cb0d80e9e50272ef7a84cecc4beb651ab4ef6d94f5"
+              --title "ClassicMusic 1.18" \
+              --notes "ClassicMusic 1.18. The main screen is now one vertically centered composition with a strict 6dp rhythm between neighboring blocks. Favorites always uses the compact player: no cover, seek bar or time, leaving much more room for the song list. The hidden radio placeholder was removed entirely. The technical 'загрузить ещё' button was removed; favorites pages now load automatically as you scroll near the end. Cross-dissolve navigation remains. Signed Android APK. SHA-256: 427df511ea0c8542cb22ffeac7f91e5abe5389151caef1c38360d74ee11d8c40"
           fi
