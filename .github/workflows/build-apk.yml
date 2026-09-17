@@ -43,10 +43,32 @@ jobs:
           echo "fc6943e73814dd0434fc11a999c343114aa157fa48fd402080a458438243d4f4  /tmp/patch19.py" | sha256sum -c -
           python3 - <<'PY'
           from pathlib import Path
-          p=Path('/tmp/patch19.py')
-          s=p.read_text()
-          s=s.replace("r'private final UiTheme\\[\\] themes\\s*=\\s*\\{.*?\\n\\s*\\};'", "r'private final UiTheme\\[\\] themes\\s*=\\s*\\{.*?\\};'")
-          p.write_text(s)
+          jp=Path('app/src/main/java/ru/classic/music/MainActivity.java')
+          js=jp.read_text()
+          start=js.index('private final UiTheme[] themes')
+          brace=js.index('{',start)
+          depth=0
+          end=None
+          for i in range(brace,len(js)):
+              if js[i]=='{': depth+=1
+              elif js[i]=='}':
+                  depth-=1
+                  if depth==0:
+                      end=js.index(';',i)+1
+                      break
+          if end is None: raise SystemExit('theme array end not found')
+          block='''private final UiTheme[] themes={
+              new UiTheme(0xffEEE6DA,0xffF8F1E7,0xffD5C6B2,0xffA85D2A,0xff211E1A,0xff2A2621,0xff7A6F63,0x28A85D2A),
+              new UiTheme(0xffE8E8E8,0xffFAFAFA,0xffC8C8C8,0xff555555,0xff151515,0xff1B1B1B,0xff707070,0x1F555555),
+              new UiTheme(0xffDDF4F0,0xffF6FFFD,0xff9FD8D0,0xff168E88,0xff172B29,0xff183C39,0xff607A77,0x2881D8D0),
+              new UiTheme(0xffFBE7E2,0xffFFF8F6,0xffEFC0B5,0xffD66D5E,0xff332220,0xff482E2A,0xff8C6A64,0x28E58C7D),
+              new UiTheme(0xffE8EBF2,0xffF8F9FC,0xffBDC5D6,0xff536A9B,0xff1F2633,0xff273248,0xff697386,0x28536A9B)
+          };'''
+          jp.write_text(js[:start]+block+js[end:])
+          pp=Path('/tmp/patch19.py')
+          ps=pp.read_text()
+          ps=ps.replace("def sub1(pattern,repl,label,flags=0):\n    global s\n", "def sub1(pattern,repl,label,flags=0):\n    global s\n    if label=='themes': return\n")
+          pp.write_text(ps)
           PY
           python3 /tmp/patch19.py
           grep -q 'radioButton=button("поймать радиоволну"' app/src/main/java/ru/classic/music/MainActivity.java
