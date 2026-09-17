@@ -11,7 +11,7 @@ p=Path('app/src/main/java/ru/classic/music/MainActivity.java')
 s=p.read_text()
 
 # Drop Android Visualizer state. The deck meters are now permissionless UI meters driven by
-# actual playback state (Yandex player or radio), so the app never needs microphone/audio capture access.
+# actual playback state (Yandex player or radio), so the app never asks for capture access.
 s=one(s,
 '''    private VuMeterView vuMeter;
     private android.media.audiofx.Visualizer vuVisualizer;
@@ -133,9 +133,3 @@ s=one(s,
 'no visualizer teardown')
 
 p.write_text(s)
-
-# Remove the capture permission entirely. No microphone/audio permission dialog in 1.26.
-mp=Path('app/src/main/AndroidManifest.xml')
-ms=mp.read_text()
-ms=ms.replace('    <uses-permission android:name="android.permission.RECORD_AUDIO"/>\n','')
-mp.write_text(ms)
