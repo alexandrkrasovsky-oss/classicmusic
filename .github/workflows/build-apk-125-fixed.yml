@@ -1,0 +1,90 @@
+name: Build ClassicMusic 1.25 fixed APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/build-apk-125-fixed.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ANDROID_HOME: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: current
+      - uses: actions/checkout@v4
+        with:
+          ref: f671a90da678fba509fbbeff81f56f282c9756e0
+          path: base
+      - name: Reconstruct and patch 1.25
+        shell: bash
+        run: |
+          cat base/source.part-* | base64 -d > source.zip
+          echo "72efec36fd86c82fae239ed716e3bded0c156a70666609c5ff7a47f6fdc050ee  source.zip" | sha256sum -c -
+          mkdir project && unzip -q source.zip -d project
+          cd project/ClassicMusic-source-next
+          cat ../../current/updates18b/part-* | base64 -d | gzip -d > app/src/main/java/ru/classic/music/MainActivity.java
+          cat ../../current/updates19/patch.part-* | base64 -d > /tmp/patch19.py
+          python3 - <<'PY'
+          from pathlib import Path
+          jp=Path('app/src/main/java/ru/classic/music/MainActivity.java'); js=jp.read_text()
+          start=js.index('private final UiTheme[] themes'); brace=js.index('{',start); depth=0; end=None
+          for i in range(brace,len(js)):
+              if js[i]=='{': depth+=1
+              elif js[i]=='}':
+                  depth-=1
+                  if depth==0: end=js.index(';',i)+1; break
+          block='''private final UiTheme[] themes={
+              new UiTheme(0xffEEE6DA,0xffF8F1E7,0xffD5C6B2,0xffA85D2A,0xff211E1A,0xff2A2621,0xff7A6F63,0x28A85D2A),
+              new UiTheme(0xffE8E8E8,0xffFAFAFA,0xffC8C8C8,0xff555555,0xff151515,0xff1B1B1B,0xff707070,0x1F555555),
+              new UiTheme(0xffDDF4F0,0xffF6FFFD,0xff9FD8D0,0xff168E88,0xff172B29,0xff183C39,0xff607A77,0x2881D8D0),
+              new UiTheme(0xffFBE7E2,0xffFFF8F6,0xffEFC0B5,0xffD66D5E,0xff332220,0xff482E2A,0xff8C6A64,0x28E58C7D),
+              new UiTheme(0xffE8EBF2,0xffF8F9FC,0xffBDC5D6,0xff536A9B,0xff1F2633,0xff273248,0xff697386,0x28536A9B)
+          };'''
+          jp.write_text(js[:start]+block+js[end:])
+          pp=Path('/tmp/patch19.py'); ps=pp.read_text().replace("def sub1(pattern,repl,label,flags=0):\n    global s\n", "def sub1(pattern,repl,label,flags=0):\n    global s\n    if label=='themes': return\n"); pp.write_text(ps)
+          PY
+          python3 /tmp/patch19.py
+          for n in 10 11 12 13 14 15 16 17; do python3 ../../current/updates$n/patch.py; done
+          for n in 118 119 120 121 122 123 124; do python3 ../../current/updates$n/patch.py; done
+          python3 ../../current/updates125fix/patch.py
+          cp ../../current/updates15/ic_launcher.xml app/src/main/res/drawable/ic_launcher.xml
+          cp ../../current/updates14/ic_tm_mark.xml app/src/main/res/drawable/ic_tm_mark.xml
+          cp ../../current/updates121/ic_radio_power.xml app/src/main/res/drawable/ic_radio_power.xml
+          grep -q '^<manifest' app/src/main/AndroidManifest.xml
+          grep -q 'android.permission.RECORD_AUDIO' app/src/main/AndroidManifest.xml
+          grep -q 'private final class VuMeterView extends View' app/src/main/java/ru/classic/music/MainActivity.java
+          grep -q 'final int segments=12' app/src/main/java/ru/classic/music/MainActivity.java
+          grep -q 'new android.media.audiofx.Visualizer(session)' app/src/main/java/ru/classic/music/MainActivity.java
+          grep -q 'int audioSessionId()' app/src/main/java/ru/classic/music/PlaybackService.java
+          sed -i 's/--version-code 13 --version-name 1.3/--version-code 35 --version-name 1.25/' build-apk.sh
+          sed -i 's/ClassicMusic-1.3.apk/ClassicMusic-1.25.apk/g' build-apk.sh
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Android 35
+        shell: bash
+        run: |
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager"; fi
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
+      - name: Build signed APK
+        working-directory: project/ClassicMusic-source-next
+        shell: bash
+        run: |
+          sed -i 's/-bootclasspath "$ANDROID_JAR"/-classpath "$ANDROID_JAR"/' build-apk.sh
+          chmod +x build-apk.sh
+          ./build-apk.sh
+          sha256sum build/manual/ClassicMusic-1.25.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClassicMusic-1.25
+          path: project/ClassicMusic-source-next/build/manual/ClassicMusic-1.25.apk
+          if-no-files-found: error
