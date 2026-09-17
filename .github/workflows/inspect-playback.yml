@@ -34,7 +34,11 @@ jobs:
           python3 /tmp/patch19.py
           python3 ../../current/updates10/patch.py
           python3 ../../current/updates11/patch.py
-          echo '=== START/WAVE REFERENCES ==='
-          grep -n -E 'startWave|startFavorites|toggle\(|previous\(|next\(|toggleShuffle|current|queue|track|wave' app/src/main/java/ru/classic/music/MainActivity.java | head -n 220
-          echo '=== SERVICE BLOCK ==='
-          grep -n -A260 -B20 'class PlayerService' app/src/main/java/ru/classic/music/MainActivity.java || true
+          echo '=== JAVA FILES ==='
+          find app/src/main/java -type f -name '*.java' -print
+          echo '=== PLAYBACK REFERENCES ALL FILES ==='
+          grep -R -n -E 'startWave|startFavorites|void toggle\(|void previous\(|void next\(|toggleShuffle|Track current|current;' app/src/main/java | head -n 300
+          echo '=== PLAYER SERVICE FILE ==='
+          f=$(grep -R -l -E 'void startWave|startWave\(' app/src/main/java | grep -v MainActivity | head -n1 || true)
+          echo "$f"
+          if [ -n "$f" ]; then nl -ba "$f" | sed -n '1,420p'; fi
