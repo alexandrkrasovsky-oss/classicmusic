@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.23 Release
+name: Publish ClassicMusic 1.24 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35240607030 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.23 -D release-files
-          test -f release-files/ClassicMusic-1.23.apk
-          echo "9b69d490ac18c716019878105341d46904e7528471a1cb6799874dce85abe63e  release-files/ClassicMusic-1.23.apk" | sha256sum -c -
+          gh run download 35241670989 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.24 -D release-files
+          test -f release-files/ClassicMusic-1.24.apk
+          echo "2fbbe524047f07fa42aaccddca6e30507be91986c856e516b95d35d89c9a2f1e  release-files/ClassicMusic-1.24.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.23 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.23 release-files/ClassicMusic-1.23.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.24 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.24 release-files/ClassicMusic-1.24.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.23 release-files/ClassicMusic-1.23.apk \
+            gh release create v1.24 release-files/ClassicMusic-1.24.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.23" \
-              --notes "ClassicMusic 1.23. The radio power icon is now permanently visible and acts as a true toggle: red while radio is off, soft green with a subtle halo while a stream is loading or playing. Pressing the power icon while off starts the currently selected/default station; pressing it while on stops radio. The center of the radio card keeps the simple interaction from 1.22: first tap starts radio, following taps advance through stations, with explicit loading/error labels. The power icon is inset 12dp so its visual right edge aligns with the player's right-side controls instead of sticking to the card edge. Signed Android APK. SHA-256: 9b69d490ac18c716019878105341d46904e7528471a1cb6799874dce85abe63e"
+              --title "ClassicMusic 1.24" \
+              --notes "ClassicMusic 1.24. The radio power indicator is now a small tube-radio-style lamp: softly red while off, amber while the stream is connecting, and green once playback starts. The glyph is smaller and precisely inset so its visual right edge aligns with the player's right-hand controls, without the large hard circular background. The power icon remains a true on/off toggle, while tapping the center of the radio card starts radio and subsequent taps cycle stations. Loading and error labels remain explicit. Signed Android APK. SHA-256: 2fbbe524047f07fa42aaccddca6e30507be91986c856e516b95d35d89c9a2f1e"
           fi
