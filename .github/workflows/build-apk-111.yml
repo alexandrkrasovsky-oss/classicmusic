@@ -85,7 +85,7 @@ jobs:
           python3 ../../current/updates122/patch.py
           python3 ../../current/updates123/patch.py
           python3 ../../current/updates124/patch.py
-          python3 ../../current/updates125/patch.py
+          python3 ../../current/updates125fix/patch.py
           python3 ../../current/updates126/patch.py
           cp ../../current/updates15/ic_launcher.xml app/src/main/res/drawable/ic_launcher.xml
           cp ../../current/updates14/ic_tm_mark.xml app/src/main/res/drawable/ic_tm_mark.xml
