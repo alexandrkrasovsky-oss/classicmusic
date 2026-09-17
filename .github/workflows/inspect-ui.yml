@@ -1,0 +1,58 @@
+name: Inspect ClassicMusic UI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/inspect-ui.yml'
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: current
+      - uses: actions/checkout@v4
+        with:
+          ref: f671a90da678fba509fbbeff81f56f282c9756e0
+          path: base
+      - name: Reconstruct current MainActivity and inspect favorites UI
+        shell: bash
+        run: |
+          cat base/source.part-* | base64 -d > base.zip
+          mkdir project
+          unzip -q base.zip -d project
+          cd project/ClassicMusic-source-next
+          cat ../../current/updates18b/part-* | base64 -d | gzip -d > app/src/main/java/ru/classic/music/MainActivity.java
+          cat ../../current/updates19/patch.part-* | base64 -d > /tmp/patch19.py
+          python3 - <<'PY'
+          from pathlib import Path
+          jp=Path('app/src/main/java/ru/classic/music/MainActivity.java')
+          js=jp.read_text()
+          start=js.index('private final UiTheme[] themes')
+          brace=js.index('{',start)
+          depth=0
+          end=None
+          for i in range(brace,len(js)):
+              if js[i]=='{': depth+=1
+              elif js[i]=='}':
+                  depth-=1
+                  if depth==0:
+                      end=js.index(';',i)+1
+                      break
+          block='''private final UiTheme[] themes={
+              new UiTheme(0xffEEE6DA,0xffF8F1E7,0xffD5C6B2,0xffA85D2A,0xff211E1A,0xff2A2621,0xff7A6F63,0x28A85D2A),
+              new UiTheme(0xffE8E8E8,0xffFAFAFA,0xffC8C8C8,0xff555555,0xff151515,0xff1B1B1B,0xff707070,0x1F555555),
+              new UiTheme(0xffDDF4F0,0xffF6FFFD,0xff9FD8D0,0xff168E88,0xff172B29,0xff183C39,0xff607A77,0x2881D8D0),
+              new UiTheme(0xffFBE7E2,0xffFFF8F6,0xffEFC0B5,0xffD66D5E,0xff332220,0xff482E2A,0xff8C6A64,0x28E58C7D),
+              new UiTheme(0xffE8EBF2,0xffF8F9FC,0xffBDC5D6,0xff536A9B,0xff1F2633,0xff273248,0xff697386,0x28536A9B)
+          };'''
+          jp.write_text(js[:start]+block+js[end:])
+          pp=Path('/tmp/patch19.py')
+          ps=pp.read_text().replace("def sub1(pattern,repl,label,flags=0):\n    global s\n", "def sub1(pattern,repl,label,flags=0):\n    global s\n    if label=='themes': return\n")
+          pp.write_text(ps)
+          PY
+          python3 /tmp/patch19.py
+          echo '--- matches ---'
+          grep -n -C 12 -E 'моя волна|любимые песни|showPage\(|favoritesPage|favorite' app/src/main/java/ru/classic/music/MainActivity.java | head -n 260
