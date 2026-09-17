@@ -92,6 +92,8 @@ jobs:
           grep -q 'body.setGravity(favoritesPage?Gravity.TOP:Gravity.CENTER_VERTICAL)' app/src/main/java/ru/classic/music/MainActivity.java
           grep -q 'body.addView(controls,cp)' app/src/main/java/ru/classic/music/MainActivity.java
           grep -q 'controls.setPadding(dp(8),dp(8),dp(8),dp(8))' app/src/main/java/ru/classic/music/MainActivity.java
+          grep -q 'setOnScrollListener(new AbsListView.OnScrollListener()' app/src/main/java/ru/classic/music/MainActivity.java
+          ! grep -q 'more=button("загрузить ещё"' app/src/main/java/ru/classic/music/MainActivity.java
           ! grep -q 'radioButton.setVisibility(View.INVISIBLE)' app/src/main/java/ru/classic/music/MainActivity.java
           grep -q 'Toast.makeText(this,"ты и так здесь"' app/src/main/java/ru/classic/music/MainActivity.java
           test -f app/src/main/res/drawable/ic_tm_mark.xml
