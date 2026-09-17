@@ -1,4 +1,4 @@
-name: Inspect ClassicMusic playback service
+name: Inspect ClassicMusic final UI controls
 on:
   push:
     branches: [ ui-polish-114 ]
@@ -39,5 +39,7 @@ jobs:
           python3 ../../current/updates12/patch.py
           python3 ../../current/updates13/patch.py
           python3 ../../current/updates14/patch.py
-          echo '=== PLAYBACK SERVICE ==='
-          nl -ba app/src/main/java/ru/classic/music/PlaybackService.java | sed -n '1,360p'
+          echo '=== CONTROLS AND HELPERS ==='
+          grep -n -E 'primaryButton|Button button|button\(|shuffle|footerMark|setTextColor|applyTheme|configureControls|showPage|switchPage' app/src/main/java/ru/classic/music/MainActivity.java | head -n 220
+          echo '=== MAIN 150-470 ==='
+          nl -ba app/src/main/java/ru/classic/music/MainActivity.java | sed -n '150,470p'
