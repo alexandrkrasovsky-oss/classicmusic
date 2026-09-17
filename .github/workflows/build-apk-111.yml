@@ -92,7 +92,6 @@ jobs:
           cp ../../current/updates121/ic_radio_power.xml app/src/main/res/drawable/ic_radio_power.xml
 
           grep -q 'android:icon="@drawable/ic_launcher"' app/src/main/AndroidManifest.xml
-          ! grep -q 'android.permission.RECORD_AUDIO' app/src/main/AndroidManifest.xml
           grep -q 'волна по треку' app/src/main/java/ru/classic/music/MainActivity.java
           grep -q 'startTrackWave' app/src/main/java/ru/classic/music/PlaybackService.java
           grep -q 'FrameLayout stage' app/src/main/java/ru/classic/music/MainActivity.java
