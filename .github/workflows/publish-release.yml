@@ -34,4 +34,5 @@ jobs:
             gh release create v1.28 release-files/ClassicMusic-1.28.apk \
               -R alexandrkrasovsky-oss/classicmusic \
               --title "ClassicMusic 1.28" \
-              --notes "ClassicMusic 1.28. Removed the easy-to-hit logout button from the main interface so accidental taps cannot sign the user out. The saved Yandex authorization remains in place as before. All 1.27 radio identity, antenna cover, lamp indicator, and permissionless vintage L/R meter behavior is retained. Signed Android APK. SHA-256: 7d95a438c1aab25e108121b08565a25b5299018f5c81e74f6c246b8485ba529c"\n          fi\n
+              --notes "ClassicMusic 1.28. Removed the easy-to-hit logout button from the main interface so accidental taps cannot sign the user out. The saved Yandex authorization remains in place as before. All 1.27 radio identity, antenna cover, lamp indicator, and permissionless vintage L/R meter behavior is retained. Signed Android APK. SHA-256: 7d95a438c1aab25e108121b08565a25b5299018f5c81e74f6c246b8485ba529c"
+          fi
