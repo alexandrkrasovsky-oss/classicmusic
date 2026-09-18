@@ -1,4 +1,4 @@
-name: Publish ClassicMusic 1.27 Release
+name: Publish ClassicMusic 1.28 Release
 
 on:
   workflow_dispatch:
@@ -20,19 +20,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-files
-          gh run download 35253808399 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.27 -D release-files
-          test -f release-files/ClassicMusic-1.27.apk
-          echo "32b40906e7da95ce354e9dcb69d9660adb1a227ea264a7489e4516d64fed9613  release-files/ClassicMusic-1.27.apk" | sha256sum -c -
+          gh run download 35335036714 -R alexandrkrasovsky-oss/classicmusic -n ClassicMusic-1.28 -D release-files
+          test -f release-files/ClassicMusic-1.28.apk
+          echo "7d95a438c1aab25e108121b08565a25b5299018f5c81e74f6c246b8485ba529c  release-files/ClassicMusic-1.28.apk" | sha256sum -c -
 
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.27 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
-            gh release upload v1.27 release-files/ClassicMusic-1.27.apk -R alexandrkrasovsky-oss/classicmusic --clobber
+          if gh release view v1.28 -R alexandrkrasovsky-oss/classicmusic >/dev/null 2>&1; then
+            gh release upload v1.28 release-files/ClassicMusic-1.28.apk -R alexandrkrasovsky-oss/classicmusic --clobber
           else
-            gh release create v1.27 release-files/ClassicMusic-1.27.apk \
+            gh release create v1.28 release-files/ClassicMusic-1.28.apk \
               -R alexandrkrasovsky-oss/classicmusic \
-              --title "ClassicMusic 1.27" \
-              --notes "ClassicMusic 1.27. The main player now recognizes radio playback instead of showing 'ничего не играет'. While a stream is connecting, the player shows the selected station with 'радио · загрузка…'; once connected it shows the station name with 'радио'. Radio also gets a restrained symbolic antenna cover in the same tinted visual language as the rest of the player. Normal track artwork and metadata return automatically when radio is stopped. The permissionless vintage L/R meters from 1.26 continue to animate for both music and radio and extinguish on pause/stop. Signed Android APK. SHA-256: 32b40906e7da95ce354e9dcb69d9660adb1a227ea264a7489e4516d64fed9613"
-          fi
+              --title "ClassicMusic 1.28" \
+              --notes "ClassicMusic 1.28. Removed the easy-to-hit logout button from the main interface so accidental taps cannot sign the user out. The saved Yandex authorization remains in place as before. All 1.27 radio identity, antenna cover, lamp indicator, and permissionless vintage L/R meter behavior is retained. Signed Android APK. SHA-256: 7d95a438c1aab25e108121b08565a25b5299018f5c81e74f6c246b8485ba529c"\n          fi\n
